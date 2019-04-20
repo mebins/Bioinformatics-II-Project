@@ -38,6 +38,7 @@ public class FastaReader {
 				record.sequence += line;
 			}
 		}
+		records.add(record); // last record
 		for(FastaRecord rec : records)
 		{
 			rec.sequence = rec.sequence.substring(4);
@@ -47,20 +48,16 @@ public class FastaReader {
 
 	public static void main(String[] args)
 	{
-		FastaReader fr = new FastaReader("/Users/mebinskaria/Documents/bioinformatics-ii/project/training-set/aligned/pax-2-aligned.txt");
+		FastaReader fr = new FastaReader("/Users/mebinskaria/Documents/bioinformatics-ii/project/training-set/aligned/pax-test.txt");
 		ArrayList<FastaRecord> records = new ArrayList<>();
 		
 		try {
 			records = fr.readRecords();
+			System.out.println(records.size());
+			SequenceMatrix sequences = new SequenceMatrix(records);
+			Scorer s = new Scorer();
+			System.out.println(s.score(sequences));
 			
-			for(int i = 0; i < s.sequences.length; i++)
-			{
-				for(int j = 0; j < s.sequences[0].length; j++)
-				{
-					System.out.print(s.sequences[i][j]);
-				}
-				System.out.println();
-			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
