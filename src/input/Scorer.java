@@ -30,11 +30,56 @@ public class Scorer {
 	{
 		
 	}
-	public Scorer(double min_category, double min_variation, double max_indels)
+	public Scorer(double min_indel, double max_indel, double min_variation, double max_variation, double min_category, double max_category)
 	{
-		this.max_indel = max_indels;
+		this.min_indel = min_indel;
+		this.max_indel = max_indel;
 		this.min_category_change = min_category;
+		this.max_category_change = max_category;
 		this.min_variation = min_variation;
+		this.max_variation = max_variation;
+	}
+	public double getMax_category_change() {
+		return max_category_change;
+	}
+	public void setMax_category_change(double max_category_change) {
+		this.max_category_change = max_category_change;
+	}
+	public double getMin_category_change() {
+		return min_category_change;
+	}
+	public void setMin_category_change(double min_category_change) {
+		this.min_category_change = min_category_change;
+	}
+	public double getMax_variation() {
+		return max_variation;
+	}
+	public void setMax_variation(double max_variation) {
+		this.max_variation = max_variation;
+	}
+	public double getMin_variation() {
+		return min_variation;
+	}
+	public void setMin_variation(double min_variation) {
+		this.min_variation = min_variation;
+	}
+	public double getMax_indel() {
+		return max_indel;
+	}
+	public void setMax_indel(double max_indel) {
+		this.max_indel = max_indel;
+	}
+	public double getMin_indel() {
+		return min_indel;
+	}
+	public void setMin_indel(double min_indel) {
+		this.min_indel = min_indel;
+	}
+	public int getWindow() {
+		return window;
+	}
+	public void setWindow(int window) {
+		this.window = window;
 	}
 	/*
 	 * Returns the starting index of the best scored region.
@@ -135,7 +180,6 @@ public class Scorer {
     	double var = letters.stream().distinct().filter(x-> x!= '-').count();
     	return var > 0 ? var/20.0 : 0.0;
     }
-    
     /*
      * Returns the Score of the category change.
      * There are three groups.

@@ -43,6 +43,8 @@ public class FastaReader {
 		{
 			rec.sequence = rec.sequence.substring(4);
 		}
+		br.close();
+		fr.close();
 		return records;
 	}
 
@@ -56,8 +58,9 @@ public class FastaReader {
 			System.out.println(records.size());
 			SequenceMatrix sequences = new SequenceMatrix(records);
 			Scorer s = new Scorer();
-			System.out.println(s.score(sequences));
-			
+			int start_index = s.score(sequences);
+			FastaWriter fw = new FastaWriter("/Users/mebinskaria/Documents/bioinformatics-ii/project/training-set/aligned/pax-test-scored.txt");
+			fw.generate_fasta(start_index, s.getWindow(), records);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
