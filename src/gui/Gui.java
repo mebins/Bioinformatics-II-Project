@@ -1,13 +1,19 @@
 package gui;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Shell;
@@ -37,6 +43,10 @@ public class Gui {
 	private static int start_index = -1;
 	private Text txtTargetFilePath;
 	private Text text_window;
+	private File read_file;
+	private JButton button;
+	private static JFileChooser fc;
+	private Text txtFileName;
 	/**
 	 * Launch the application.
 	 * @param args
@@ -45,6 +55,7 @@ public class Gui {
 		try {
 			Gui window = new Gui();
 			records = new ArrayList<>();
+			fc = new JFileChooser();
 			window.open();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,14 +125,14 @@ public class Gui {
 		});
 		
 		
-		btnFind.setBounds(212, 240, 94, 28);
+		btnFind.setBounds(262, 250, 94, 28);
 		btnFind.setText("Find");
 		
 		Button btnGenerateReport = new Button(shlFastaConservedDomain, SWT.NONE);
 		btnGenerateReport.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				FastaWriter fw = new FastaWriter(txtTargetFilePath.getText());
+				FastaWriter fw = new FastaWriter(txtTargetFilePath.getText() + '/'+txtFileName.getText());
 				try {
 					fw.generate_fasta(start_index, s.getWindow(), records);
 				} catch (IOException e1) {
@@ -130,7 +141,7 @@ public class Gui {
 				}
 			}
 		});
-		btnGenerateReport.setBounds(322, 240, 119, 28);
+		btnGenerateReport.setBounds(378, 250, 119, 28);
 		btnGenerateReport.setText("Generate Report");
 		
 		txt_max_indel = new Text(shlFastaConservedDomain, SWT.BORDER);
@@ -177,8 +188,18 @@ public class Gui {
 		lblMaxCategory.setBounds(247, 105, 94, 14);
 		
 		Button btnSelectFile = new Button(shlFastaConservedDomain, SWT.NONE);
-		btnSelectFile.setBounds(103, 240, 94, 28);
-		btnSelectFile.setText("Select File");
+		btnSelectFile.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				fc.showOpenDialog(null);
+				read_file = fc.getSelectedFile();
+			}
+		});
+		
+		button = new JButton();
+		button.setBounds(103, 240, 94, 28);
+		button.setText("Select File");
 		
 		txt_file_path = new Text(shlFastaConservedDomain, SWT.BORDER);
 		txt_file_path.setText("FILE PATH");
@@ -195,5 +216,45 @@ public class Gui {
 		Label lblWindowSize = new Label(shlFastaConservedDomain, SWT.NONE);
 		lblWindowSize.setBounds(247, 141, 80, 14);
 		lblWindowSize.setText("Window Size");
+		
+		Button btnNewButton = new Button(shlFastaConservedDomain, SWT.NONE);
+		btnNewButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				FileDialog fileDialog = new FileDialog(shlFastaConservedDomain);
+
+		        
+		        fileDialog.setFilterExtensions(new String[]{"*.txt", "*.fasta", "*.*"});
+		        fileDialog.setFilterNames(new String[]{ "text file", "Fasta file", "Any"});
+		        
+		        String firstFile = fileDialog.open();
+
+		        if(firstFile != null) {
+		         txt_file_path.setText(firstFile);
+		        }
+		      }
+			        
+			});
+		btnNewButton.setBounds(20, 250, 94, 28);
+		btnNewButton.setText("Set File Path");
+		
+		txtFileName = new Text(shlFastaConservedDomain, SWT.BORDER);
+		txtFileName.setText("FILE NAME");
+		txtFileName.setBounds(10, 225, 487, 19);
+		
+		Button btnNewButton_1 = new Button(shlFastaConservedDomain, SWT.NONE);
+		btnNewButton_1.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				DirectoryDialog directoryDialog = new DirectoryDialog(shlFastaConservedDomain);
+		        directoryDialog.setMessage("Please select a directory and click OK");
+		        String dir = directoryDialog.open();
+		        if(dir != null) {
+		          txtTargetFilePath.setText(dir);
+		        }
+		      }
+			});
+		btnNewButton_1.setBounds(132, 250, 109, 28);
+		btnNewButton_1.setText("Set Save Path");
 	}
 }

@@ -30,7 +30,7 @@ public class Scorer {
 	{
 		
 	}
-	public Scorer(double min_indel, double max_indel, double min_variation, double max_variation, double min_category, double max_category)
+	public Scorer(double min_indel, double max_indel, double min_variation, double max_variation, double min_category, double max_category,int window)
 	{
 		this.min_indel = min_indel;
 		this.max_indel = max_indel;
@@ -38,6 +38,7 @@ public class Scorer {
 		this.max_category_change = max_category;
 		this.min_variation = min_variation;
 		this.max_variation = max_variation;
+		this.window = window;
 	}
 	public double getMax_category_change() {
 		return max_category_change;
@@ -97,7 +98,7 @@ public class Scorer {
 		}
 		
 		double a = 0; //highest score
-		int b = 0; //best index
+		int b = -1; //best index
 		for(int i = 0; i < window_vals.length; i++)
 		{
 			if(window_vals[i] > a)
